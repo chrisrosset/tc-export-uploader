@@ -1,0 +1,3 @@
+#!/bin/sh
+cronpid=$(pgrep -P 1 cron)
+su pptruser -c 'cd /app && node export.js' > /proc/${cronpid}/fd/1 2> /proc/${cronpid}/fd/2

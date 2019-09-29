@@ -7,7 +7,6 @@ const credentials = require('./credentials');
 const LOGIN_URL = 'https://home.tenantcloud.com';
 const USERNAME_SELECTOR = '#email';
 const PASSWORD_SELECTOR = '#password';
-const REMEMBER_SELECTOR = ' body > app > div:nth-child(1) > div > div.content > auth-content-component > div > div > div > div > div > div > login-component > form > div > div.fieldset > custom-checkbox > div > div > label';
 const LOGIN_SELECTOR = ' body > app > div:nth-child(1) > div > div.content > auth-content-component > div > div > div > div > div > div > login-component > form > div > div.form-group--button > button';
 
 async function login(browser) {
@@ -29,9 +28,6 @@ async function login(browser) {
     await page.click(PASSWORD_SELECTOR);
     await page.keyboard.type(credentials.tc_password);
     L.info('Password entered.');
-
-    await page.click(REMEMBER_SELECTOR);
-    L.info('Remember clicked.');
 
     const nav2 = page.waitForNavigation({
         timeout: 60000,

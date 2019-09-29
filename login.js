@@ -7,7 +7,7 @@ const credentials = require('./credentials');
 const LOGIN_URL = 'https://home.tenantcloud.com';
 const USERNAME_SELECTOR = '#email';
 const PASSWORD_SELECTOR = '#password';
-const LOGIN_SELECTOR = ' body > app > div:nth-child(1) > div > div.content > auth-content-component > div > div > div > div > div > div > login-component > form > div > div.form-group--button > button';
+const LOGIN_SELECTOR = '[class="form-group--button"]';
 
 async function login(browser) {
     const page = await browser.newPage();

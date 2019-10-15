@@ -4,7 +4,7 @@
   "description": "",
   "main": "export.js",
   "dependencies": {
-    "csv-parse": "^2.5.0",
+    "csv-parse": "^4.6.3",
     "googleapis": "^32.0.0",
     "logplease": "^1.2.14",
     "node-fetch": "^2.1.2",

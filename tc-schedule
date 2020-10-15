@@ -1,2 +1,2 @@
-*/15 * * * * root /app/tc-from-cron
+*/15 * * * *  root  /app/tc-from-cron
 #

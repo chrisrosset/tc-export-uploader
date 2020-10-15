@@ -11,7 +11,7 @@ const login = require('./login');
 const config = require('./credentials');
 
 const TOKEN_PATH = 'credentials.json';
-const EXPORT_URL = 'https://home.tenantcloud.com/v1/landlord/transactions?export=csv';
+const EXPORT_URL = 'https://home.tenantcloud.com/transactions';
 
 function authorize(credentials, callback) {
     const {client_secret, client_id, redirect_uris} = credentials.installed;
@@ -37,23 +37,39 @@ async function download() {
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
 
+    const path = "./accounting.csv";
+    if (fs.existsSync(path))
+        fs.unlinkSync(path);
+
     L.info('Logging in...');
     const page = await login(browser);
     L.info('Logged in.');
 
     L.info('Fetching the export file...');
-    const csvdata = await page.evaluate(async url => {
-        const fetchResp = await fetch(url, {credentials: 'include'});
-        return await fetchResp.text();
-    }, EXPORT_URL);
-    L.info('Fetched.');
+
+    await page.goto(EXPORT_URL, {waitUntil: 'domcontentloaded'});
+    await page.waitForXPath("//span[contains(., 'CSV')]");
+
+    const [csvLink] = await page.$x("//span[contains(., 'CSV')]");
+
+    if (csvLink)
+    {
+        L.info('Found the CSV button.');
+        await page._client.send('Page.setDownloadBehavior', {behavior: 'allow', downloadPath: './'});
+        await csvLink.click({ clickCount: 1, delay: 100 });
+        await page.waitForTimeout(10000);
+    }
+    else
+    {
+        throw new Error("Could not find the CSV button.");
+    }
 
     L.info('Closing the browser...');
     await browser.close();
 
     L.info('Browser closed.');
-
-    return csvdata;
+    let data = fs.readFileSync(path, 'utf8').replace(/^\uFEFF/, '');
+    return data;
 };
 
 async function upload(auth, data) {

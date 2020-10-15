@@ -21,10 +21,12 @@ async function login(browser) {
     L.info('Waiting for navigation...');
     await nav1;
 
+    await page.waitForSelector(USERNAME_SELECTOR, {visible: true});
     await page.click(USERNAME_SELECTOR);
     await page.keyboard.type(credentials.tc_username);
     L.info('Username entered.');
 
+    await page.waitForSelector(PASSWORD_SELECTOR, {visible: true});
     await page.click(PASSWORD_SELECTOR);
     await page.keyboard.type(credentials.tc_password);
     L.info('Password entered.');
